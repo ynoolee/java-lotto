@@ -39,6 +39,12 @@ class LottoTest {
     }
 
     @Test
+    void 중복된_수_가_포함된_6개의_로또넘버로_로또를_생성하려_할_경우_예외가_발생한다() {
+        Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> new Lotto(LottoUtil.createLottoNumbers(Arrays.asList(1, 1, 2, 3, 4, 5))));
+    }
+
+    @Test
     void 개수가_6개가_아닌_로또넘버들로_로또를_생성하려_할_경우_예외가_발생한다() {
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> new Lotto(
