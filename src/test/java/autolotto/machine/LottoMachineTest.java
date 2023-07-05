@@ -18,7 +18,10 @@ import java.util.Map;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public class LottoMachineTest {
+
     private final LottoNumber bonusAnyLottoNotContaining = new LottoNumber(11);
+
+    private final static int LOTTO_PRICE = 1000;
 
     @Test
     void 금액에_따라_로또를_생성해_갖고_있다() {
@@ -29,7 +32,7 @@ public class LottoMachineTest {
 
         List<Lotto> createdLotteries = lottoMachine.lotteries();
 
-        Assertions.assertThat(createdLotteries).hasSize(inputMoney / 1000);
+        Assertions.assertThat(createdLotteries).hasSize(inputMoney / LOTTO_PRICE);
     }
 
     @Test
@@ -39,7 +42,7 @@ public class LottoMachineTest {
         LottoMachine lottoMachine =
                 new LottoMachine(new LottoGenerator(new FixedNumberShuffler()), inputMoney);
 
-        Assertions.assertThat(lottoMachine.lottoCount()).isEqualTo(inputMoney / 1000);
+        Assertions.assertThat(lottoMachine.lottoCount()).isEqualTo(inputMoney / LOTTO_PRICE);
     }
 
     @Test
