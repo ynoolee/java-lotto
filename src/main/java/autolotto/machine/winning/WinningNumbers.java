@@ -1,17 +1,18 @@
 package autolotto.machine.winning;
 
+import autolotto.machine.lotto.Lotto;
 import autolotto.machine.lotto.LottoNumber;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WinningNumbers {
-    private final List<LottoNumber> winningNumbers;
+    private final Lotto winningNumbers;
     private final LottoNumber bonusNumber;
 
     public WinningNumbers(List<LottoNumber> winningNumbers, LottoNumber bonusNumber) {
         checkBonusIsDuplicatedNumber(winningNumbers, bonusNumber);
-        this.winningNumbers = winningNumbers;
+        this.winningNumbers = new Lotto(winningNumbers);
         this.bonusNumber = bonusNumber;
     }
 
@@ -22,7 +23,7 @@ public class WinningNumbers {
     }
 
     public List<LottoNumber> winningNumbers() {
-        return new ArrayList<>(this.winningNumbers);
+        return new ArrayList<>(this.winningNumbers.lottoNumbers());
     }
 
     public LottoNumber bonusNumber() {
