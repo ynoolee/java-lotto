@@ -13,7 +13,7 @@ public class WinningNumbers {
     public WinningNumbers(List<Integer> winningNumbers, Integer bonusNumber) {
         checkBonusIsDuplicatedNumber(winningNumbers, bonusNumber);
         this.winningNumbers = new Lotto(winningNumbers);
-        this.bonusNumber = new LottoNumber(bonusNumber);
+        this.bonusNumber = LottoNumber.of(bonusNumber);
     }
 
     private void checkBonusIsDuplicatedNumber(List<Integer> winningNumbers, Integer bonusNumber) {
