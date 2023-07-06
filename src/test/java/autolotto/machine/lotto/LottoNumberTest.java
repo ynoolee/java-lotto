@@ -14,7 +14,7 @@ class LottoNumberTest {
             int edgeNumber = 45;
             int invalidNumber = edgeNumber + 1;
             Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                    .isThrownBy(() -> new LottoNumber(invalidNumber));
+                    .isThrownBy(() -> LottoNumber.of(invalidNumber));
         }
 
         @Test
@@ -23,8 +23,19 @@ class LottoNumberTest {
             int invalidNumber = edgeNumber - 1;
 
             Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                    .isThrownBy(() -> new LottoNumber(invalidNumber));
+                    .isThrownBy(() -> LottoNumber.of(invalidNumber));
 
         }
+    }
+
+    @Test
+    void 동일한_값을_가진_LottoNumber_는_동일한_인스턴스다(){
+        int value = 1;
+
+        LottoNumber lottoNumber1 = LottoNumber.of(value);
+        LottoNumber lottoNumber2 = LottoNumber.of(value);
+
+        Assertions.assertThat(lottoNumber1 == lottoNumber2)
+                .isTrue();
     }
 }

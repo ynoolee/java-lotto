@@ -19,7 +19,7 @@ public class Lotto {
     private static Set<LottoNumber> toSet(List<Integer> numbers) {
         Set<LottoNumber> lotto = new HashSet<>();
         for (Integer numb : numbers) {
-            lotto.add(new LottoNumber(numb));
+            lotto.add(LottoNumber.of(numb));
         }
 
         return lotto;
@@ -53,6 +53,6 @@ public class Lotto {
     }
 
     public boolean contains(int number) {
-        return numbers.contains(new LottoNumber(number));
+        return numbers.contains(LottoNumber.of(number));
     }
 }
