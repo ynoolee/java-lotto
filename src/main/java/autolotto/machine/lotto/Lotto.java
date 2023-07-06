@@ -12,8 +12,21 @@ public class Lotto {
 
     private final Set<LottoNumber> numbers;
 
-    public Lotto(List<LottoNumber> numbers) {
-        this.numbers = new HashSet<>(numbers);
+    public Lotto(List<Integer> numbers) {
+        this(toSet(numbers));
+    }
+
+    private static Set<LottoNumber> toSet(List<Integer> numbers) {
+        Set<LottoNumber> lotto = new HashSet<>();
+        for (Integer numb : numbers) {
+            lotto.add(new LottoNumber(numb));
+        }
+
+        return lotto;
+    }
+
+    public Lotto(Set<LottoNumber> numbers) {
+        this.numbers = numbers;
         checkCountOfNumbers();
     }
 

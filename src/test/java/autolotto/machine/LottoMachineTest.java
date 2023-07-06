@@ -2,7 +2,6 @@ package autolotto.machine;
 
 import autolotto.machine.lotto.Lotto;
 import autolotto.machine.lotto.LottoGenerator;
-import autolotto.machine.lotto.LottoNumber;
 import autolotto.machine.lotto.fixture.FixedNumberShuffler;
 import autolotto.machine.winning.Winning;
 import autolotto.machine.winning.WinningNumbers;
@@ -19,7 +18,7 @@ import java.util.Map;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public class LottoMachineTest {
 
-    private final LottoNumber bonusAnyLottoNotContaining = new LottoNumber(11);
+    private final Integer bonusAnyLottoNotContaining = 11;
 
     private final static int LOTTO_PRICE = 1000;
 
@@ -49,7 +48,7 @@ public class LottoMachineTest {
     void 당첨번호가_주어지면_수익률을_소수점_둘째_자리까지_반올림한_값으로_알려준다() {
         LottoMachine lottoMachine = new LottoMachine(new LottoGenerator(new FixedNumberShuffler()), 3000);
         BigDecimal expectedProfitRate = BigDecimal.valueOf((double) Winning.THREE.winningMoney() * 3 / 3000).setScale(2);
-        WinningNumbers winningNumbers = new WinningNumbers(LottoUtil.createLottoNumbers(Arrays.asList(1, 2, 3, 21, 22, 23)), bonusAnyLottoNotContaining);
+        WinningNumbers winningNumbers = new WinningNumbers(Arrays.asList(1, 2, 3, 21, 22, 23), bonusAnyLottoNotContaining);
 
         BigDecimal profitRate = lottoMachine.profitRate(winningNumbers);
 
@@ -59,7 +58,7 @@ public class LottoMachineTest {
     @Test
     void 당첨번호가_주어지면_일치_개수별_로또_개수를_알려준다() {
         LottoMachine lottoMachineWithSameThreeLotto = new LottoMachine(new LottoGenerator(new FixedNumberShuffler()), 3000);
-        WinningNumbers winningNumbers = new WinningNumbers(LottoUtil.createLottoNumbers(Arrays.asList(1, 2, 3, 21, 22, 23)), bonusAnyLottoNotContaining);
+        WinningNumbers winningNumbers = new WinningNumbers(Arrays.asList(1, 2, 3, 21, 22, 23), bonusAnyLottoNotContaining);
 
         Map<Winning, Integer> numberOfEachMatchingCount = lottoMachineWithSameThreeLotto.winningState(winningNumbers);
 
