@@ -88,11 +88,10 @@ public class LottoMachine {
     }
 
     public int autoLottoCount() {
-        return this.lottoCount() - this.manualCount;
+        return this.totalLottoCount() - this.manualCount;
     }
 
-    // TODO : lottoCount -> totalLottoCount 네이밍 변경
-    public int lottoCount() {
+    public int totalLottoCount() {
         return this.wallet.lottoSize();
     }
 }

@@ -25,7 +25,7 @@ public class Main {
         LottoMachine lottoMachine =
                 new LottoMachine(tempManualCount, new LottoGenerator(new RandomShuffler()), consoleView.inputPurchaseAmount());
 
-        consoleView.printLottoCount(lottoMachine.lottoCount());
+        consoleView.printLottoCount(lottoMachine.totalLottoCount());
         consoleView.printLottoNumbers(
                 lottoMachine.lotteries().stream()
                         .map(LottoDTO::from)

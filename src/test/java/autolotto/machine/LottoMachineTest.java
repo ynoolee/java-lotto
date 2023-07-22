@@ -44,7 +44,7 @@ public class LottoMachineTest {
         LottoMachine lottoMachine =
                 new LottoMachine(manualCount, new LottoGenerator(new FixedNumberShuffler()), inputMoney);
 
-        Assertions.assertThat(lottoMachine.lottoCount()).isEqualTo(inputMoney / LOTTO_PRICE);
+        Assertions.assertThat(lottoMachine.totalLottoCount()).isEqualTo(inputMoney / LOTTO_PRICE);
     }
 
 
