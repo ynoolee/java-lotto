@@ -20,8 +20,10 @@ public class Main {
         ConsoleView consoleView = new ConsoleView();
         IntegerStringParser parser = new IntegerStringParser(", ", new IntegerStringConverter());
 
+        // FIXME : 수동 로또 정보 받고  -> 로또 머신 생성
+        int tempManualCount = 0;
         LottoMachine lottoMachine =
-                new LottoMachine(new LottoGenerator(new RandomShuffler()), consoleView.inputPurchaseAmount());
+                new LottoMachine(tempManualCount, new LottoGenerator(new RandomShuffler()), consoleView.inputPurchaseAmount());
 
         consoleView.printLottoCount(lottoMachine.lottoCount());
         consoleView.printLottoNumbers(
