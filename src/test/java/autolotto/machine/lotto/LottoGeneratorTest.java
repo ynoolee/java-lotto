@@ -1,6 +1,5 @@
 package autolotto.machine.lotto;
 
-import autolotto.InvalidManualLottoException;
 import autolotto.machine.lotto.fixture.FixedNumberShuffler;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -51,8 +50,9 @@ class LottoGeneratorTest {
             int invalidLottoNumber = 55;
             List<Integer> lottoNumbers = Arrays.asList(invalidLottoNumber, 1, 2, 3, 4, 5);
 
-            Assertions.assertThatExceptionOfType(InvalidManualLottoException.class)
-                    .isThrownBy(() -> lottoGenerator.generateManualLotto(lottoNumbers));
+            Assertions.assertThatIllegalArgumentException()
+                    .isThrownBy(() -> lottoGenerator.generateManualLotto(lottoNumbers))
+                    .withMessageMatching("로또 번호는 1과 45 사이의 값이어야 합니다.");
         }
 
 
@@ -69,8 +69,9 @@ class LottoGeneratorTest {
         void F_수동로또_번호_6개가_주어지지_않는경우_생성에_실패한다() {
             List<Integer> lottoNumbers = Arrays.asList(1, 2, 3, 4, 5);
 
-            Assertions.assertThatExceptionOfType(InvalidManualLottoException.class)
-                    .isThrownBy(() -> lottoGenerator.generateManualLotto(lottoNumbers));
+            Assertions.assertThatIllegalArgumentException()
+                    .isThrownBy(() -> lottoGenerator.generateManualLotto(lottoNumbers))
+                    .withMessageMatching("로또는 중복되지 않은 6개의 수로 이루어져야 합니다");
         }
     }
 

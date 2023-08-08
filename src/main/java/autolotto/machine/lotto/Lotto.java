@@ -27,10 +27,10 @@ public class Lotto {
 
     public Lotto(Set<LottoNumber> numbers) {
         this.numbers = numbers;
-        checkCountOfNumbers();
+        checkCountAndDuplicatedNumbers();
     }
 
-    private void checkCountOfNumbers() {
+    private void checkCountAndDuplicatedNumbers() {
         if (this.numbers.size() != LOTTO_NUMBER_COUNT) {
             throw new IllegalArgumentException("로또는 중복되지 않은 6개의 수로 이루어져야 합니다");
         }

@@ -23,24 +23,7 @@ public class LottoGenerator {
     }
 
     public Lotto generateManualLotto(List<Integer> lottoNumbers) {
-        verifyValidLottoNumbers(lottoNumbers);
-
         return new Lotto(lottoNumbers);
-    }
-
-    private void verifyValidLottoNumbers(List<Integer> lottoNumbers) {
-        if (lottoNumbers.size() != LOTTO_NUMBERS_SIZE) {
-            throw new InvalidManualLottoException("6개의 수를 입력해주세요");
-        }
-        for (Integer lottoNumber : lottoNumbers) {
-            verifyValidLottoNumber(lottoNumber);
-        }
-    }
-
-    private void verifyValidLottoNumber(Integer target) {
-        if (target > LOTTO_MAX_NUMBER || target < LOTTO_MIN_NUMBER) {
-            throw new InvalidManualLottoException("적절하지 않은 로또 넘버가 포함되어있습니다");
-        }
     }
 
     private List<Integer> generateLottoRangeNumbers() {
