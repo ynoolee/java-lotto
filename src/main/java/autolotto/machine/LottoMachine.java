@@ -17,23 +17,29 @@ public class LottoMachine {
     private final static int LOTTO_PRICE = 1000;
     private final static int PROFIT_RATE_SCALE = 2;
 
+    private final LottoGenerator lottoGenerator;
+    private final LottoWallet wallet;
     private final int inputMoney;
     private final int manualCount;
-    private final LottoWallet wallet;
+    private final int autoCount;
 
     public LottoMachine(int inputManualCount, LottoGenerator lottoGenerator, int inputMoney) {
         final int totalLottoCount = calculateLottoCount(inputMoney);
 
         checkInvalidManualLottoCount(totalLottoCount, inputManualCount);
 
+        this.lottoGenerator = lottoGenerator;
         this.manualCount = inputManualCount;
+        this.autoCount = totalLottoCount - inputManualCount;
         this.inputMoney = inputMoney;
-        this.wallet = initWallet(lottoGenerator, totalLottoCount);
+        this.wallet = initWallet(inputManualCount, lottoGenerator, totalLottoCount);
     }
 
-    private static LottoWallet initWallet(LottoGenerator lottoGenerator, int totalLottoCount) {
-        LottoWallet wallet = new LottoWallet();
-        for (int i = 0; i < totalLottoCount; i++) {
+    private static LottoWallet initWallet(int manualCount, LottoGenerator lottoGenerator, int totalLottoCount) {
+        final LottoWallet wallet = new LottoWallet();
+        final int autoLottoCount = totalLottoCount - manualCount;
+
+        for (int i = 0; i < autoLottoCount; i++) {
             wallet.addLotto(lottoGenerator.generateLotto());
         }
         return wallet;
@@ -55,6 +61,10 @@ public class LottoMachine {
 
     private static boolean isInvalidManualCount(int totalCount, int manualCount) {
         return manualCount > totalCount;
+    }
+
+    public void addManualLotto(List<Integer> lottoNumbers) {
+        this.wallet.addLotto(lottoGenerator.generateManualLotto(lottoNumbers));
     }
 
     public List<Lotto> lotteries() {
@@ -88,9 +98,10 @@ public class LottoMachine {
     }
 
     public int autoLottoCount() {
-        return this.totalLottoCount() - this.manualCount;
+        return this.autoCount;
     }
 
+    // TODO : rename this as currentTotalLottoCount
     public int totalLottoCount() {
         return this.wallet.lottoSize();
     }

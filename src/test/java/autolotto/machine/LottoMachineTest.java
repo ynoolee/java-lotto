@@ -6,10 +6,7 @@ import autolotto.machine.lotto.fixture.FixedNumberShuffler;
 import autolotto.machine.winning.Winning;
 import autolotto.machine.winning.WinningNumbers;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -91,7 +88,25 @@ public class LottoMachineTest {
 
     @Nested
     class ManuallyGeneratedLottoTest {
+        private LottoMachine lottoMachine;
 
+        @BeforeEach
+        void setUp() {
+            int inputMoney = 2000;
+            int anyManualCount = 1;
+            lottoMachine = new LottoMachine(anyManualCount, new LottoGenerator(new FixedNumberShuffler()), inputMoney);
+        }
+
+        @Test
+        void S_수동_로또번호가_주어지면_수동로또를_추가한다() {
+            int beforeAddTotalCount = lottoMachine.lotteries().size();
+
+            lottoMachine.addManualLotto(Arrays.asList(1, 2, 3, 4, 5, 6));
+
+            int afterAddTotalCount = lottoMachine.lotteries().size();
+
+            Assertions.assertThat(afterAddTotalCount).isEqualTo(beforeAddTotalCount + 1);
+        }
     }
 
     @Test
