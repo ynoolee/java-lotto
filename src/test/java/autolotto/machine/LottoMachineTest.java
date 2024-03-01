@@ -23,25 +23,31 @@ public class LottoMachineTest {
     private final int manualCount = 0;
 
     @Test
+    void 총_로또의_개수를_알려준다() {
+        // TODO : Money 를 캡슐화
+        int inputMoney = 2000;
+
+        LottoMachine lottoMachine =
+                new LottoMachine(manualCount, new LottoGenerator(new FixedNumberShuffler()), LottoMoney.of(inputMoney));
+
+        Assertions.assertThat(lottoMachine.totalLottoCount()).isEqualTo(inputMoney / LOTTO_PRICE);
+    }
+
+    @Test
+    void lotteries_를_호출할_경우_비어있는_컬렉션을_리턴한다() {
+
+    }
+
+    @Test
     void 금액에_따라_로또를_생성해_갖고_있다() {
         int inputMoney = 2000;
 
         LottoMachine lottoMachine =
-                new LottoMachine(manualCount, new LottoGenerator(new FixedNumberShuffler()), inputMoney);
+                new LottoMachine(manualCount, new LottoGenerator(new FixedNumberShuffler()), LottoMoney.of(inputMoney));
 
         List<Lotto> createdLotteries = lottoMachine.lotteries();
 
         Assertions.assertThat(createdLotteries).hasSize(inputMoney / LOTTO_PRICE);
-    }
-
-    @Test
-    void 총_로또의_개수를_알려준다() {
-        int inputMoney = 2000;
-
-        LottoMachine lottoMachine =
-                new LottoMachine(manualCount, new LottoGenerator(new FixedNumberShuffler()), inputMoney);
-
-        Assertions.assertThat(lottoMachine.totalLottoCount()).isEqualTo(inputMoney / LOTTO_PRICE);
     }
 
 
@@ -59,7 +65,7 @@ public class LottoMachineTest {
                     .isThrownBy(() -> new LottoMachine(
                             invalidManualCount,
                             new LottoGenerator(new FixedNumberShuffler()),
-                            anyInputMoney
+                            LottoMoney.of(anyInputMoney)
                     ));
         }
 
@@ -71,13 +77,13 @@ public class LottoMachineTest {
                     .isThrownBy(() -> new LottoMachine(
                             expectedTotalCount + 1,
                             new LottoGenerator(new FixedNumberShuffler()),
-                            inputMoney));
+                            LottoMoney.of(inputMoney)));
         }
 
         @Test
         void S_유효한_수동로또의_개수가_주어져_생성된_로또머신은_자동_로또_개수를_알려준다() {
             int manualCount = 6;
-            LottoMachine lottoMachine = new LottoMachine(manualCount, new LottoGenerator(new FixedNumberShuffler()), expectedTotalCount * LOTTO_PRICE);
+            LottoMachine lottoMachine = new LottoMachine(manualCount, new LottoGenerator(new FixedNumberShuffler()), LottoMoney.of(expectedTotalCount * LOTTO_PRICE));
 
             int autoCount = lottoMachine.autoLottoCount();
 
@@ -94,7 +100,7 @@ public class LottoMachineTest {
         void setUp() {
             int inputMoney = 2000;
             int anyManualCount = 1;
-            lottoMachine = new LottoMachine(anyManualCount, new LottoGenerator(new FixedNumberShuffler()), inputMoney);
+            lottoMachine = new LottoMachine(anyManualCount, new LottoGenerator(new FixedNumberShuffler()), LottoMoney.of(inputMoney));
         }
 
         @Test
@@ -111,7 +117,7 @@ public class LottoMachineTest {
 
     @Test
     void 당첨번호가_주어지면_수익률을_소수점_둘째_자리까지_반올림한_값으로_알려준다() {
-        LottoMachine lottoMachine = new LottoMachine(manualCount, new LottoGenerator(new FixedNumberShuffler()), 3000);
+        LottoMachine lottoMachine = new LottoMachine(manualCount, new LottoGenerator(new FixedNumberShuffler()), LottoMoney.of(3000));
         BigDecimal expectedProfitRate = BigDecimal.valueOf((double) Winning.THREE.winningMoney() * 3 / 3000).setScale(2);
         WinningNumbers winningNumbers = new WinningNumbers(Arrays.asList(1, 2, 3, 21, 22, 23), bonusNumberAnyLottoNotContaining);
 
@@ -122,7 +128,7 @@ public class LottoMachineTest {
 
     @Test
     void 당첨번호가_주어지면_일치_개수별_로또_개수를_알려준다() {
-        LottoMachine lottoMachineWithSameThreeLotto = new LottoMachine(manualCount, new LottoGenerator(new FixedNumberShuffler()), 3000);
+        LottoMachine lottoMachineWithSameThreeLotto = new LottoMachine(manualCount, new LottoGenerator(new FixedNumberShuffler()), LottoMoney.of(3000));
         WinningNumbers winningNumbers = new WinningNumbers(Arrays.asList(1, 2, 3, 21, 22, 23), bonusNumberAnyLottoNotContaining);
 
         Map<Winning, Integer> numberOfEachMatchingCount = lottoMachineWithSameThreeLotto.winningState(winningNumbers);

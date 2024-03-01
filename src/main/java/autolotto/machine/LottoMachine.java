@@ -14,25 +14,22 @@ import java.util.List;
 import java.util.Map;
 
 public class LottoMachine {
-    private final static int LOTTO_PRICE = 1000;
     private final static int PROFIT_RATE_SCALE = 2;
-
     private final LottoGenerator lottoGenerator;
     private final LottoWallet wallet;
     private final int inputMoney;
     private final int manualCount;
     private final int autoCount;
 
-    public LottoMachine(int inputManualCount, LottoGenerator lottoGenerator, int inputMoney) {
-        final int totalLottoCount = calculateLottoCount(inputMoney);
+    public LottoMachine(int inputManualCount, LottoGenerator lottoGenerator, LottoMoney lottoMoney) {
 
-        checkInvalidManualLottoCount(totalLottoCount, inputManualCount);
+        checkInvalidManualLottoCount(lottoMoney.lottoCount(), inputManualCount);
 
         this.lottoGenerator = lottoGenerator;
         this.manualCount = inputManualCount;
-        this.autoCount = totalLottoCount - inputManualCount;
-        this.inputMoney = inputMoney;
-        this.wallet = initWallet(inputManualCount, lottoGenerator, totalLottoCount);
+        this.autoCount = lottoMoney.lottoCount() - inputManualCount;
+        this.inputMoney = lottoMoney.money();
+        this.wallet = initWallet(inputManualCount, lottoGenerator, lottoMoney.lottoCount());
     }
 
     private static LottoWallet initWallet(int manualCount, LottoGenerator lottoGenerator, int totalLottoCount) {
@@ -43,10 +40,6 @@ public class LottoMachine {
             wallet.addLotto(lottoGenerator.generateLotto());
         }
         return wallet;
-    }
-
-    private static int calculateLottoCount(int inputMoney) {
-        return inputMoney / LOTTO_PRICE;
     }
 
     private static void checkInvalidManualLottoCount(int totalCount, int manualCount) {
