@@ -4,6 +4,8 @@ import autolotto.dto.LottoDTO;
 import autolotto.dto.Statistics;
 import autolotto.dto.WinningAmount;
 import autolotto.machine.LottoMachine;
+import autolotto.machine.LottoMoney;
+import autolotto.machine.ValidationUtil;
 import autolotto.machine.lotto.LottoGenerator;
 import autolotto.machine.lotto.RandomShuffler;
 import autolotto.machine.winning.Winning;
@@ -18,14 +20,25 @@ public class Main {
 
     public static void main(String[] args) {
         ConsoleView consoleView = new ConsoleView();
-        IntegerStringParser parser = new IntegerStringParser(", ", new IntegerStringConverter());
+        IntegerStringParser userInputParser = new IntegerStringParser(", ", new IntegerStringConverter());
 
-        // FIXME : 수동 로또 정보 받고  -> 로또 머신 생성
-        int tempManualCount = 0;
+        // todo : 예외처리
+        int inputMoney = consoleView.inputPurchaseAmount();
+        final LottoMoney lottoPurchaseMoney = LottoMoney.of(inputMoney);
+
+        // todo : 예외처리
+        int manualCount = consoleView.inputManualCount();
+        ValidationUtil.checkValidManualCount(lottoPurchaseMoney, manualCount);
+
+
         LottoMachine lottoMachine =
-                new LottoMachine(tempManualCount, new LottoGenerator(new RandomShuffler()), consoleView.inputPurchaseAmount());
+                new LottoMachine(manualCount, new LottoGenerator(new RandomShuffler()), lottoPurchaseMoney);
 
-        consoleView.printLottoCount(lottoMachine.totalLottoCount());
+        // TODO : 수동 로또 개수를 받야아함
+        int autoLottoCount = lottoMachine.autoLottoCount();
+        int manualLottoCount = lottoMachine.totalLottoCount() - autoLottoCount;
+
+        consoleView.printLottoCount(autoLottoCount, manualLottoCount);
         consoleView.printLottoNumbers(
                 lottoMachine.lotteries().stream()
                         .map(LottoDTO::from)
@@ -33,7 +46,7 @@ public class Main {
 
         WinningNumbers winningNumbers =
                 new WinningNumbers(
-                        parser.parse(consoleView.inputWinningNumbers()),
+                        userInputParser.parse(consoleView.inputWinningNumbers()),
                         consoleView.inputBonusNumber());
 
         consoleView.printStatistic(new Statistics(

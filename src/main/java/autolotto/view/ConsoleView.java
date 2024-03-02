@@ -9,14 +9,27 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class ConsoleView {
+
     public int inputPurchaseAmount() {
         System.out.println("구입금액을 입력해 주세요.");
 
         return Integer.parseInt(getInputString());
     }
 
-    public void printLottoCount(int lottoCount) {
-        System.out.println(lottoCount + "개를 구매했습니다.");
+    private String getInputString() {
+        Scanner scanner = new Scanner(System.in);
+
+        return scanner.nextLine();
+    }
+
+    public int inputManualCount() {
+        System.out.println("수동으로 구매할 로또 수를 입력해 주세요.");
+
+        return Integer.parseInt(getInputString());
+    }
+
+    public void printLottoCount(int autoLottoCount, int manualLottoCount) {
+        System.out.println("수동으로 " + manualLottoCount + ", 자동으로" + autoLottoCount + "개를 구매했습니다.");
     }
 
     public void printLottoNumbers(List<LottoDTO> lotteries) {
@@ -39,12 +52,6 @@ public class ConsoleView {
         System.out.println("보너스 볼을 입력해 주세요.");
 
         return Integer.parseInt(getInputString());
-    }
-
-    private String getInputString() {
-        Scanner scanner = new Scanner(System.in);
-
-        return scanner.nextLine();
     }
 
     public void printStatistic(Statistics statistics) {
