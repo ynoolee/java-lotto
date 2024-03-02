@@ -1,6 +1,5 @@
 package autolotto.machine.lotto;
 
-import autolotto.machine.LottoUtil;
 import autolotto.machine.lotto.fixture.FixedNumberShuffler;
 import autolotto.machine.winning.WinningNumbers;
 import org.assertj.core.api.Assertions;
@@ -11,9 +10,8 @@ import java.util.Arrays;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class LottoWalletTest {
     private final LottoGenerator lottoGenerator = new LottoGenerator(new FixedNumberShuffler());
-    private final WinningNumbers fixedWinningNumbers = new WinningNumbers(
-            LottoUtil.createLottoNumbers(Arrays.asList(1, 2, 3, 40, 41, 42)),
-            new LottoNumber(11));
+    private final WinningNumbers fixedWinningNumbers =
+            new WinningNumbers(Arrays.asList(1, 2, 3, 40, 41, 42), 11);
 
     @Test
     void 지갑에_로또를_하나_추가할_수_있다() {

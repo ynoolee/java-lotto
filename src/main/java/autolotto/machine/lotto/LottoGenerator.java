@@ -1,5 +1,7 @@
 package autolotto.machine.lotto;
 
+import autolotto.InvalidManualLottoException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,13 +22,16 @@ public class LottoGenerator {
         return new Lotto(generateLottoRangeNumbers());
     }
 
-    private List<LottoNumber> generateLottoRangeNumbers() {
+    public Lotto generateManualLotto(List<Integer> lottoNumbers) {
+        return new Lotto(lottoNumbers);
+    }
+
+    private List<Integer> generateLottoRangeNumbers() {
         List<Integer> shuffled = shuffler.shuffle(lottoRangeNumbers());
 
         return shuffled.stream()
                 .limit(LOTTO_NUMBERS_SIZE)
                 .sorted()
-                .map(LottoNumber::new)
                 .collect(Collectors.toList());
     }
 

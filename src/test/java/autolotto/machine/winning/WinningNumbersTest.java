@@ -1,7 +1,5 @@
 package autolotto.machine.winning;
 
-import autolotto.machine.LottoUtil;
-import autolotto.machine.lotto.LottoNumber;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +12,6 @@ class WinningNumbersTest {
         int duplicatedBonusNumber = 1;
 
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> new WinningNumbers(LottoUtil.createLottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6)), new LottoNumber(duplicatedBonusNumber)));
+                .isThrownBy(() -> new WinningNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), duplicatedBonusNumber));
     }
 }

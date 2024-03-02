@@ -1,13 +1,10 @@
 package autolotto.machine.winning;
 
-import autolotto.machine.LottoUtil;
 import autolotto.machine.lotto.Lotto;
-import autolotto.machine.lotto.LottoNumber;
 import autolotto.machine.lotto.LottoWallet;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
-
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -69,8 +66,8 @@ class WinningTest {
 
     @Test
     void Winning_에게_로또와_당첨번호_를_전달하면_당첨금을_알려준다() {
-        Lotto lotto = new Lotto(LottoUtil.createLottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6)));
-        WinningNumbers winningNumbers = new WinningNumbers(LottoUtil.createLottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6)), new LottoNumber(7));
+        Lotto lotto = new Lotto(Arrays.asList(1, 2, 3, 4, 5, 6));
+        WinningNumbers winningNumbers = new WinningNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 7);
 
         Winning winning = Winning.winningOf(lotto, winningNumbers);
 
@@ -79,17 +76,16 @@ class WinningTest {
 
     @Nested
     class 총_당첨금액_테스트 {
-        private final WinningNumbers fixedWinningNumbers = new WinningNumbers(
-                LottoUtil.createLottoNumbers(Arrays.asList(1, 2, 3, 40, 41, 42)),
-                new LottoNumber(11));
+        private final WinningNumbers fixedWinningNumbers =
+                new WinningNumbers(Arrays.asList(1, 2, 3, 40, 41, 42), 11);
 
         @Test
         void Winning_에게_일련의_로또와_당첨번호를_전달하면_총_당첨금액을_알려준다() {
 
             LottoWallet wallet = new LottoWallet(Arrays.asList(
-                    new Lotto(LottoUtil.createLottoNumbers(Arrays.asList(1, 22, 32, 24, 25, 26))),
-                    new Lotto(LottoUtil.createLottoNumbers(Arrays.asList(1, 2, 23, 24, 25, 27))),
-                    new Lotto(LottoUtil.createLottoNumbers(Arrays.asList(1, 2, 3, 24, 25, 28)))));
+                    new Lotto(Arrays.asList(1, 2, 23, 24, 25, 27)),
+                    new Lotto(Arrays.asList(1, 22, 32, 24, 25, 26)),
+                    new Lotto(Arrays.asList(1, 2, 3, 24, 25, 28))));
             int expectedTotalWinnings = Winning.THREE.winningMoney();
 
             int totalWinnings = Winning.totalAmountOf(wallet.allLotteries(), fixedWinningNumbers);
@@ -100,9 +96,9 @@ class WinningTest {
         @Test
         void 당첨로또와_당첨이아닌_로또가_섞여있는_경우_총_당첨금액을_알려준다() {
             List<Lotto> wallet = Arrays.asList(
-                    new Lotto(LottoUtil.createLottoNumbers(Arrays.asList(1, 22, 32, 24, 25, 26))),
-                    new Lotto(LottoUtil.createLottoNumbers(Arrays.asList(1, 2, 23, 24, 25, 27))),
-                    new Lotto(LottoUtil.createLottoNumbers(Arrays.asList(1, 2, 3, 24, 25, 28))));
+                    new Lotto(Arrays.asList(1, 22, 32, 24, 25, 26)),
+                    new Lotto(Arrays.asList(1, 2, 23, 24, 25, 27)),
+                    new Lotto(Arrays.asList(1, 2, 3, 24, 25, 28)));
             int expectedTotalWinnings = Winning.THREE.winningMoney();
 
             int totalWinnings = Winning.totalAmountOf(wallet, fixedWinningNumbers);

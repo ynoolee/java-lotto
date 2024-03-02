@@ -14,31 +14,50 @@ import java.util.List;
 import java.util.Map;
 
 public class LottoMachine {
-    private final static int LOTTO_PRICE = 1000;
     private final static int PROFIT_RATE_SCALE = 2;
-
-    private final int inputMoney;
+    private final LottoGenerator lottoGenerator;
     private final LottoWallet wallet;
+    private final int inputMoney;
+    private final int manualCount;
+    private final int autoCount;
 
-    public LottoMachine(LottoGenerator lottoGenerator, int inputMoney) {
-        this(inputMoney, initWallet(lottoGenerator, inputMoney));
+    public LottoMachine(int inputManualCount, LottoGenerator lottoGenerator, LottoMoney lottoMoney) {
+
+        checkInvalidManualLottoCount(lottoMoney.lottoCount(), inputManualCount);
+
+        this.lottoGenerator = lottoGenerator;
+        this.manualCount = inputManualCount;
+        this.autoCount = lottoMoney.lottoCount() - inputManualCount;
+        this.inputMoney = lottoMoney.money();
+        this.wallet = initWallet(inputManualCount, lottoGenerator, lottoMoney.lottoCount());
     }
 
-    public LottoMachine(int inputMoney, LottoWallet wallet) {
-        this.inputMoney = inputMoney;
-        this.wallet = wallet;
-    }
+    private static LottoWallet initWallet(int manualCount, LottoGenerator lottoGenerator, int totalLottoCount) {
+        final LottoWallet wallet = new LottoWallet();
+        final int autoLottoCount = totalLottoCount - manualCount;
 
-    private static LottoWallet initWallet(LottoGenerator lottoGenerator, int inputMoney) {
-        LottoWallet wallet = new LottoWallet();
-        for (int i = 0; i < calculateLottoCount(inputMoney); i++) {
+        for (int i = 0; i < autoLottoCount; i++) {
             wallet.addLotto(lottoGenerator.generateLotto());
         }
         return wallet;
     }
 
-    private static int calculateLottoCount(int inputMoney) {
-        return inputMoney / LOTTO_PRICE;
+    private static void checkInvalidManualLottoCount(int totalCount, int manualCount) {
+        if (isNegativeManualCount(manualCount) || isInvalidManualCount(totalCount, manualCount)) {
+            throw new IllegalArgumentException("수동 로또의 개수가 적절하지 않은 값입니다");
+        }
+    }
+
+    private static boolean isNegativeManualCount(int manualCount) {
+        return manualCount < 0;
+    }
+
+    private static boolean isInvalidManualCount(int totalCount, int manualCount) {
+        return manualCount > totalCount;
+    }
+
+    public void addManualLotto(List<Integer> lottoNumbers) {
+        this.wallet.addLotto(lottoGenerator.generateManualLotto(lottoNumbers));
     }
 
     public List<Lotto> lotteries() {
@@ -71,7 +90,12 @@ public class LottoMachine {
         return lottoCountPerEachMatchingCount;
     }
 
-    public int lottoCount() {
+    public int autoLottoCount() {
+        return this.autoCount;
+    }
+
+    // TODO : rename this as currentTotalLottoCount
+    public int totalLottoCount() {
         return this.wallet.lottoSize();
     }
 }
