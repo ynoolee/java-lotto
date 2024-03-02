@@ -25,7 +25,7 @@ public class LottoMachineTest {
     @Test
     void 총_로또의_개수를_알려준다() {
         // TODO : Money 를 캡슐화
-        int inputMoney = 2000;
+        int inputMoney = LOTTO_PRICE * 2;
 
         LottoMachine lottoMachine =
                 new LottoMachine(manualCount, new LottoGenerator(new FixedNumberShuffler()), LottoMoney.of(inputMoney));
@@ -34,8 +34,19 @@ public class LottoMachineTest {
     }
 
     @Test
-    void lotteries_를_호출할_경우_비어있는_컬렉션을_리턴한다() {
+    void 수동_로또_를_입력하지_않은_상황에서_lotteries_호출_시_자동로또_개수가_리턴된다() {
+        // given
+        int totalCount = 5;
+        int manualCount = 2;
+        LottoMachine lottoMachine =
+                new LottoMachine(manualCount, new LottoGenerator(new FixedNumberShuffler()), LottoMoney.of(LOTTO_PRICE * totalCount));
 
+        // when
+        final List<Lotto> lotteries = lottoMachine.lotteries();
+
+        // then
+        Assertions.assertThat(lotteries.size()).isEqualTo(totalCount - manualCount);
+        Assertions.assertThat(lotteries.size()).isNotEqualTo(totalCount);
     }
 
     @Test
@@ -81,7 +92,7 @@ public class LottoMachineTest {
         }
 
         @Test
-        void S_유효한_수동로또의_개수가_주어져_생성된_로또머신은_자동_로또_개수를_알려준다() {
+        void S_로또머신은_자동_로또_개수를_알려준다() {
             int manualCount = 6;
             LottoMachine lottoMachine = new LottoMachine(manualCount, new LottoGenerator(new FixedNumberShuffler()), LottoMoney.of(expectedTotalCount * LOTTO_PRICE));
 
