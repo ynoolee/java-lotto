@@ -115,10 +115,10 @@ public class LottoMachineTest {
         }
 
         @Test
-        void S_수동_로또번호가_주어지면_수동로또를_추가한다() {
+        void S_수동_로또번호_리스트가_주어지면_해당_수동로또들을_생성한다() {
             int beforeAddTotalCount = lottoMachine.lotteries().size();
 
-            lottoMachine.addManualLotto(Arrays.asList(1, 2, 3, 4, 5, 6));
+            lottoMachine.addManualLotteries(List.of(Arrays.asList(1, 2, 3, 4, 5, 6)));
 
             int afterAddTotalCount = lottoMachine.lotteries().size();
 

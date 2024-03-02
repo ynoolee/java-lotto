@@ -3,7 +3,9 @@ package autolotto.view;
 import autolotto.dto.LottoDTO;
 import autolotto.dto.Statistics;
 import autolotto.dto.WinningAmount;
+import autolotto.machine.winning.Winning;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -26,6 +28,28 @@ public class ConsoleView {
         System.out.println("수동으로 구매할 로또 수를 입력해 주세요.");
 
         return Integer.parseInt(getInputString());
+    }
+
+    public List<String> inputManualLotto(int manualLottoCount) {
+        final List<String> manualLotteries = new ArrayList<>(manualLottoCount);
+
+        System.out.println("수동으로 구매할 번호를 입력해 주세요.");
+
+        Scanner scanner = new Scanner(System.in);
+
+        for (int cnt = 0; cnt < manualLottoCount; cnt++) {
+            final String inputString = scanner.nextLine();
+            manualLotteries.add(removeBrackets(inputString));
+        }
+
+        return manualLotteries;
+    }
+
+    private String removeBrackets(String input) {
+        if (input.startsWith("[") && input.endsWith("]")) {
+            return new StringBuilder(input).deleteCharAt(0).deleteCharAt(input.length() - 2).toString();
+        }
+        return input;
     }
 
     public void printLottoCount(int autoLottoCount, int manualLottoCount) {

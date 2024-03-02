@@ -55,7 +55,11 @@ public class LottoMachine {
         return manualCount > totalCount;
     }
 
-    public void addManualLotto(List<Integer> lottoNumbers) {
+    public void addManualLotteries(List<List<Integer>> lottoNumbers) {
+        lottoNumbers.forEach(this::addManualLotto);
+    }
+
+    private void addManualLotto(List<Integer> lottoNumbers) {
         this.wallet.addLotto(lottoGenerator.generateManualLotto(lottoNumbers));
     }
 
@@ -93,7 +97,10 @@ public class LottoMachine {
         return this.lottoMoney.lottoCount() - this.manualCount;
     }
 
-    // TODO : rename this as currentTotalLottoCount
+    public int manualLottoCount() {
+        return this.manualCount;
+    }
+
     public int totalLottoCount() {
         return this.wallet.lottoSize();
     }
