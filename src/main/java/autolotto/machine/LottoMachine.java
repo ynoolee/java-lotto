@@ -15,26 +15,25 @@ import java.util.Map;
 
 public class LottoMachine {
     private final static int PROFIT_RATE_SCALE = 2;
+
     private final LottoGenerator lottoGenerator;
     private final LottoWallet wallet;
-    private final int inputMoney;
+    private final LottoMoney lottoMoney;
     private final int manualCount;
-    private final int autoCount;
 
     public LottoMachine(int inputManualCount, LottoGenerator lottoGenerator, LottoMoney lottoMoney) {
 
         checkInvalidManualLottoCount(lottoMoney.lottoCount(), inputManualCount);
 
         this.lottoGenerator = lottoGenerator;
+        this.lottoMoney = lottoMoney;
         this.manualCount = inputManualCount;
-        this.autoCount = lottoMoney.lottoCount() - inputManualCount;
-        this.inputMoney = lottoMoney.money();
-        this.wallet = initWallet(inputManualCount, lottoGenerator, lottoMoney.lottoCount());
+        this.wallet = initAutoLotto(inputManualCount, lottoGenerator);
     }
 
-    private static LottoWallet initWallet(int manualCount, LottoGenerator lottoGenerator, int totalLottoCount) {
+    private LottoWallet initAutoLotto(int manualCount, LottoGenerator lottoGenerator) {
         final LottoWallet wallet = new LottoWallet();
-        final int autoLottoCount = totalLottoCount - manualCount;
+        final int autoLottoCount = this.lottoMoney.lottoCount() - manualCount;
 
         for (int i = 0; i < autoLottoCount; i++) {
             wallet.addLotto(lottoGenerator.generateLotto());
@@ -56,7 +55,11 @@ public class LottoMachine {
         return manualCount > totalCount;
     }
 
-    public void addManualLotto(List<Integer> lottoNumbers) {
+    public void addManualLotteries(List<List<Integer>> lottoNumbers) {
+        lottoNumbers.forEach(this::addManualLotto);
+    }
+
+    private void addManualLotto(List<Integer> lottoNumbers) {
         this.wallet.addLotto(lottoGenerator.generateManualLotto(lottoNumbers));
     }
 
@@ -67,7 +70,7 @@ public class LottoMachine {
     public BigDecimal profitRate(WinningNumbers winningNumbers) {
         int totalWinnings = Winning.totalAmountOf(wallet.allLotteries(), winningNumbers);
         return BigDecimal.valueOf(totalWinnings)
-                .divide(BigDecimal.valueOf(this.inputMoney), PROFIT_RATE_SCALE, RoundingMode.HALF_UP);
+                .divide(BigDecimal.valueOf(this.lottoMoney.money()), PROFIT_RATE_SCALE, RoundingMode.HALF_UP);
     }
 
     public Map<Winning, Integer> winningState(WinningNumbers winningNumbers) {
@@ -91,10 +94,13 @@ public class LottoMachine {
     }
 
     public int autoLottoCount() {
-        return this.autoCount;
+        return this.lottoMoney.lottoCount() - this.manualCount;
     }
 
-    // TODO : rename this as currentTotalLottoCount
+    public int manualLottoCount() {
+        return this.manualCount;
+    }
+
     public int totalLottoCount() {
         return this.wallet.lottoSize();
     }

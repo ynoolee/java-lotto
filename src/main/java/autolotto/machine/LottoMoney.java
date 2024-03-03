@@ -1,6 +1,6 @@
 package autolotto.machine;
 
-public class LottoMoney {
+final public class LottoMoney {
 
     private final static int LOTTO_PRICE = 1000;
 
@@ -33,5 +33,9 @@ public class LottoMoney {
 
     public int money() {
         return this.inputMoney;
+    }
+
+    public boolean isLottoPurchasePossibleOf(int count) {
+        return this.maxLottoCount >= count;
     }
 }

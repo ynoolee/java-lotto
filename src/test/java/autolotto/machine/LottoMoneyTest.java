@@ -32,4 +32,11 @@ class LottoMoneyTest {
 
         Assertions.assertThat(lottoMoney.money()).isEqualTo(3000);
     }
+
+    @Test
+    public void 주어진_개수의_로또_를_구입_할_수_있는지_알려준다() {
+        final LottoMoney lottoMoney = LottoMoney.of(5000);
+
+        Assertions.assertThat(lottoMoney.isLottoPurchasePossibleOf(6)).isFalse();
+    }
 }
