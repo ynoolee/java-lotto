@@ -8,7 +8,6 @@ import autolotto.machine.winning.WinningNumbers;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,30 +66,20 @@ public class LottoMachine {
         return this.wallet.allLotteries();
     }
 
-    public BigDecimal profitRate(WinningNumbers winningNumbers) {
+    public BigDecimal profitRateWhen(WinningNumbers winningNumbers) {
         int totalWinnings = Winning.totalAmountOf(wallet.allLotteries(), winningNumbers);
         return BigDecimal.valueOf(totalWinnings)
                 .divide(BigDecimal.valueOf(this.lottoMoney.money()), PROFIT_RATE_SCALE, RoundingMode.HALF_UP);
     }
 
-    public Map<Winning, Integer> winningState(WinningNumbers winningNumbers) {
-        Map<Winning, Integer> lottoCountPerEachMatchingCount = setZeroToAllMatchingCount();
+    public Map<Winning, Integer> winningStateWhen(WinningNumbers winningNumbers) {
+        Map<Winning, Integer> countPerEachPrize = new HashMap<>();
 
-        for (Winning winning : lottoCountPerEachMatchingCount.keySet()) {
+        for (Winning winning : Winning.values()) {
             int lottoCount = wallet.countOfLottoMatchingWith(winningNumbers, winning.matchNumber());
-            lottoCountPerEachMatchingCount.put(winning, lottoCount);
+            countPerEachPrize.put(winning, lottoCount);
         }
-
-        return lottoCountPerEachMatchingCount;
-    }
-
-    private Map<Winning, Integer> setZeroToAllMatchingCount() {
-        Map<Winning, Integer> lottoCountPerEachMatchingCount = new HashMap<>();
-
-        Arrays.stream(Winning.values())
-                .forEach(winning -> lottoCountPerEachMatchingCount.put(winning, 0));
-
-        return lottoCountPerEachMatchingCount;
+        return countPerEachPrize;
     }
 
     public int autoLottoCount() {

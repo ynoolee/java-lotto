@@ -6,7 +6,9 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -44,6 +46,17 @@ class LottoTest {
     @Test
     void 개수가_6개가_아닌_로또넘버들로_로또를_생성하려_할_경우_예외가_발생한다() {
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> new Lotto(Arrays.asList(1, 2, 3, 4, 5, 6, 7)));
+                .isThrownBy(() -> new Lotto(randomListGenerator(5)));
+    }
+
+    private List<Integer> randomListGenerator(int count) {
+        List<Integer> numbers = new ArrayList<>();
+        for (int i = 1; i <= 45; i++) {
+            numbers.add(i);
+        }
+
+        Collections.shuffle(numbers);
+
+        return numbers.subList(0, count);
     }
 }

@@ -132,7 +132,7 @@ public class LottoMachineTest {
         BigDecimal expectedProfitRate = BigDecimal.valueOf((double) Winning.THREE.winningMoney() * 3 / 3000).setScale(2);
         WinningNumbers winningNumbers = new WinningNumbers(Arrays.asList(1, 2, 3, 21, 22, 23), bonusNumberAnyLottoNotContaining);
 
-        BigDecimal profitRate = lottoMachine.profitRate(winningNumbers);
+        BigDecimal profitRate = lottoMachine.profitRateWhen(winningNumbers);
 
         Assertions.assertThat(profitRate).isEqualTo(expectedProfitRate);
     }
@@ -142,7 +142,7 @@ public class LottoMachineTest {
         LottoMachine lottoMachineWithSameThreeLotto = new LottoMachine(manualCount, new LottoGenerator(new FixedNumberShuffler()), LottoMoney.of(3000));
         WinningNumbers winningNumbers = new WinningNumbers(Arrays.asList(1, 2, 3, 21, 22, 23), bonusNumberAnyLottoNotContaining);
 
-        Map<Winning, Integer> numberOfEachMatchingCount = lottoMachineWithSameThreeLotto.winningState(winningNumbers);
+        Map<Winning, Integer> numberOfEachMatchingCount = lottoMachineWithSameThreeLotto.winningStateWhen(winningNumbers);
 
         Assertions.assertThat(numberOfEachMatchingCount.get(Winning.THREE)).isEqualTo(3);
     }

@@ -31,9 +31,9 @@ class WinningTest {
         int matchCount = 2;
         boolean anyBonusBallMatched = false;
 
-        Winning zero = Winning.winningOf(matchCount, anyBonusBallMatched);
+        int zero = Winning.winningOf(matchCount, anyBonusBallMatched).winningMoney();
 
-        Assertions.assertThat(zero).isEqualTo(Winning.ZERO);
+        Assertions.assertThat(zero).isEqualTo(0);
     }
 
     @Test

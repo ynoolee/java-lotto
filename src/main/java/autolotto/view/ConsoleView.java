@@ -2,13 +2,11 @@ package autolotto.view;
 
 import autolotto.dto.LottoDTO;
 import autolotto.dto.Statistics;
-import autolotto.dto.WinningAmount;
 import autolotto.machine.winning.Winning;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class ConsoleView {
 
@@ -80,13 +78,29 @@ public class ConsoleView {
 
     public void printStatistic(Statistics statistics) {
         System.out.println("당첨통계\n---------");
-        printEachCountOfMatchingNumber(statistics);
-        System.out.println("총 수익률은 " + statistics.profitRate() + "입니다.");
+        printEachCountOfMatchingNumber(statistics, this::addBonusMessage);
+        System.out.println("총 수익률은 " + statistics.profitRate() + "% 입니다.");
     }
 
-    private void printEachCountOfMatchingNumber(Statistics statistics) {
-        for (Map.Entry<WinningAmount, Integer> entry : statistics.countOfEachMatchingNumber().entrySet()) {
-            System.out.println(entry.getKey().matchCount() + "개 일치 (" + entry.getKey().winningAmount() + "원) - " + entry.getValue() + "개");
+    private String addBonusMessage(Winning winning) {
+        if (winning.equals(Winning.FIVE_BONUS)) {
+            return ", 보너스 볼 일치";
+        }
+        return "";
+    }
+
+    private void printEachCountOfMatchingNumber(Statistics statistics, Function<Winning, String> concatMessage) {
+        List<Winning> sortedWinning = Arrays.stream(Winning.values())
+                .sorted(Comparator.comparingInt(Winning::winningMoney))
+                .collect(Collectors.toList());
+
+        final Map<Winning, Integer> winningStatus = statistics.countOfEachMatchingNumber();
+        for (Winning winning : sortedWinning) {
+            System.out.println(
+                    winning.matchNumber() + "개 일치 "
+                            + concatMessage.apply(winning)
+                            + "(" + winning.winningMoney() + "원) - "
+                            + Optional.ofNullable(winningStatus.get(winning)).orElse(0) + "개");
         }
     }
 }
