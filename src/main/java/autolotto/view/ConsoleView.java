@@ -10,6 +10,10 @@ import java.util.stream.Collectors;
 
 public class ConsoleView {
 
+    public void printMessage(String message) {
+        System.out.println(message);
+    }
+
     public int inputPurchaseAmount() {
         System.out.println("구입금액을 입력해 주세요.");
 

@@ -21,9 +21,6 @@ public class LottoMachine {
     private final int manualCount;
 
     public LottoMachine(int inputManualCount, LottoGenerator lottoGenerator, LottoMoney lottoMoney) {
-
-        checkInvalidManualLottoCount(lottoMoney.lottoCount(), inputManualCount);
-
         this.lottoGenerator = lottoGenerator;
         this.lottoMoney = lottoMoney;
         this.manualCount = inputManualCount;
@@ -38,20 +35,6 @@ public class LottoMachine {
             wallet.addLotto(lottoGenerator.generateLotto());
         }
         return wallet;
-    }
-
-    private static void checkInvalidManualLottoCount(int totalCount, int manualCount) {
-        if (isNegativeManualCount(manualCount) || isInvalidManualCount(totalCount, manualCount)) {
-            throw new IllegalArgumentException("수동 로또의 개수가 적절하지 않은 값입니다");
-        }
-    }
-
-    private static boolean isNegativeManualCount(int manualCount) {
-        return manualCount < 0;
-    }
-
-    private static boolean isInvalidManualCount(int totalCount, int manualCount) {
-        return manualCount > totalCount;
     }
 
     public void addManualLotteries(List<List<Integer>> lottoNumbers) {
