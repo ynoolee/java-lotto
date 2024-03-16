@@ -2,7 +2,6 @@ package autolotto;
 
 import autolotto.dto.LottoDTO;
 import autolotto.dto.Statistics;
-import autolotto.dto.WinningAmount;
 import autolotto.machine.LottoMachine;
 import autolotto.machine.LottoMoney;
 import autolotto.machine.ValidationUtil;
@@ -13,7 +12,7 @@ import autolotto.machine.winning.WinningNumbers;
 import autolotto.view.ConsoleView;
 import calculator.parser.converter.IntegerStringConverter;
 
-import java.util.LinkedHashMap;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -57,19 +56,9 @@ public class Main {
                         userInputParser.parse(consoleView.inputWinningNumbers()),
                         consoleView.inputBonusNumber());
 
-        // todo 출력 순서가 보장되어야 한다
-        consoleView.printStatistic(new Statistics(
-                lottoMachine.profitRate(winningNumbers).toPlainString(),
-                convertToWinningAmount(lottoMachine.winningState(winningNumbers))));
-    }
+        final BigDecimal profit = lottoMachine.profitRateWhen(winningNumbers);
+        final Map<Winning, Integer> winningResult = lottoMachine.winningStateWhen(winningNumbers);
 
-    private static Map<WinningAmount, Integer> convertToWinningAmount(Map<Winning, Integer> lottoCountPerMatchingNumber) {
-        return lottoCountPerMatchingNumber.entrySet().stream()
-                .filter(entry -> !entry.getKey().equals(Winning.ELSE))
-                .collect(Collectors.toMap(
-                        entry -> new WinningAmount(entry.getKey().matchNumber(), entry.getKey().winningMoney()),
-                        Map.Entry::getValue,
-                        (preDuplicatedValue, newDuplicatedValue)-> preDuplicatedValue,
-                        LinkedHashMap::new));
+        consoleView.printStatistic(new Statistics(profit.toString(), winningResult));
     }
 }

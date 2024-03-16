@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public enum Winning {
-    ZERO(0, 0),
+    ELSE(0, 0),
     THREE(3, 5_000),
     FOUR(4, 50_000),
     FIVE(5, 1_500_000),
@@ -21,7 +21,7 @@ public enum Winning {
         for (Winning winning : values()) {
             winningsMap.put(winning.matchNumber, winning);
         }
-        winningsMap.remove(Winning.ZERO.matchNumber);
+        winningsMap.remove(Winning.ELSE.matchNumber);
     }
 
     private final int matchNumber;
@@ -38,7 +38,7 @@ public enum Winning {
         }
 
         return Optional.ofNullable(winningsMap.get(matchCount))
-                .orElse(Winning.ZERO);
+                .orElse(Winning.ELSE);
     }
 
     public static Winning winningOf(Lotto lotto, WinningNumbers winningNumbers) {
@@ -53,6 +53,7 @@ public enum Winning {
                 .mapToInt(lotto -> Winning.winningOf(lotto, winningNumbers).winningMoney())
                 .sum();
     }
+
     private static boolean isSecondPrize(int matchCount, boolean isBonusBallMatched) {
         return matchCount == FIVE.matchNumber && isBonusBallMatched;
     }
