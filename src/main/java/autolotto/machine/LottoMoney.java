@@ -36,6 +36,14 @@ final public class LottoMoney {
     }
 
     public boolean isLottoPurchasePossibleOf(int count) {
+        return !isNegativeManualCount(count) && isWithinMaxPurchaseLimit(count);
+    }
+
+    private boolean isWithinMaxPurchaseLimit(int count) {
         return this.maxLottoCount >= count;
+    }
+
+    private boolean isNegativeManualCount(int count) {
+        return count < 0;
     }
 }
